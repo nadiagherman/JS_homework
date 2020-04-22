@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        div {
+            display: flex;
+            justify-content: center;
+            user-select: none;
+        }
+
+        select {
+            border: solid 1px black;
+
+        }
+        option {
+            background-color: aliceblue;
+            margin-left: 12px;
+            margin-right: 20px;
+            text-align: center;
+        }
+
+        option.click.selected {
+            background-color: lightpink;
+        }
+
+
+    </style>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div>
+<select id="select1">
+    <option> A </option>
+    <option> B </option>
+    <option> C </option>
+    <option> D </option>
+    <option> E </option>
+</select>
+
+<select id="select2">
+    <option> a </option>
+    <option> b </option>
+    <option> c </option>
+    <option> d </option>
+    <option> e </option>
+</select>
+</div>
+</body>
+
+<script>
+    var select1 = document.getElementById("select1");
+    select1.multiple = true;
+    var select2 =  document.getElementById("select2");
+    select2.multiple = true;
+    var options = document.getElementsByTagName("option");
+    select1.size = options.length;
+    select2.size = select1.size;
+
+    for (let opt of options) {
+        opt.ondblclick = function () {
+            switchFunction(opt, opt.parentNode.id);
+        }
+    }
+
+    function switchFunction(optNode, id){
+        let location = "";
+
+        if (id === "select1"){
+            location = "select2";
+        }
+        else {
+            location = "select1";
+        }
+
+        /*var optNew = document.createElement("option");
+        var txtNew = document.createTextNode(opt);
+        optNew.appendChild(txtNew);
+        */
+        var selectLocation = document.getElementById(location);
+        var removeLocation = document.getElementById(id);
+        removeLocation.removeChild(optNode);
+        selectLocation.appendChild(optNode);
+
+    }
+
+
+
+</script>
+
+</body>
+</html>

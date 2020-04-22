@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <style>
+        tr, td{
+
+
+            border: 1px solid black
+        }
+
+
+
+        img {
+
+
+            display: block;
+            margin: auto;
+
+            height: 100px;
+            max-height: 100%;
+
+            width: 100px;
+            max-width: 100%;
+        }
+
+
+        #mytable {
+
+        }
+    </style>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div>
+    <table id="mytable">
+        <tbody>
+        <tr>
+            <td class="box 1"><img src="batalla.jpg" /></td>
+            <td class="box 4"><img src="buddha.jpg" /></td>
+            <td class="box 3"><img src="laura.jpg" /></td>
+            <td class="box 8"><img src="cage.jpg" /></td>
+        </tr>
+        <tr>
+            <td class="box 6"><img src="icee.jpg"/></td>
+            <td class="box 5"><img src="majid.jpg" /></td>
+            <td class="box 7"><img src="wiggles.jpg" /></td>
+            <td class="box 2"><img src="link.jpg"/></td>
+        </tr>
+
+        <tr>
+            <td class="box 2"><img src="link.jpg"/></td>
+            <td class="box 1"><img src="batalla.jpg"/></td>
+            <td class="box 7"><img src="wiggles.jpg"/></td>
+            <td class="box 4"><img src="buddha.jpg"/></td>
+        </tr>
+        <tr>
+            <td class="box 6"><img src="icee.jpg"/></td>
+            <td class="box 3"><img src="laura.jpg"/></td>
+            <td class="box 5"><img src="majid.jpg"/></td>
+            <td class="box 8"><img src="cage.jpg"/></td>
+        </tr>
+
+        </tbody>
+    </table>
+</div>
+
+
+<script>
+    var selected = [];
+    var contor = 8;
+    var shuffled;
+    function shuffle(decky) {
+
+        var currentIndex = decky.length, temporaryValue, randomIndex;
+
+        while (currentIndex !== 0) {
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex -= 1;
+            temporaryValue = decky[currentIndex];
+            decky[currentIndex] = decky[randomIndex];
+            decky[randomIndex] = temporaryValue;
+        }
+        return decky;
+
+    }
+
+
+    var deck =  document.getElementsByClassName("box");
+    deckList = [...deck];
+    shuffled = shuffle(deckList);
+    var boxes = document.getElementsByTagName("tr");
+
+    var countNode = 0;
+    var k;
+    var removing;
+    for (let i = 0; i < (boxes.length) ;i++) {
+        removing = boxes[i].childNodes;
+        for (let child of removing){
+            boxes[i].removeChild(child);
+        }
+
+        k=4;
+        while (k>0){
+            boxes[i].appendChild(shuffled[countNode]);
+            countNode++;
+            k--;
+        }
+    }
+
+    function arrayRemove(arr, value) { return arr.filter(function(ele){ return ele !== value; });}
+
+    var deckNotOut = deckList;
+    for (let tdi of deckList) {
+        tdi.childNodes[0].style.visibility = 'hidden';
+        tdi.onclick = function () {
+            showBox(tdi);
+        };
+
+    }
+
+    function freezeGame(busyOne, busyTwo){
+        for ( let tdj of deckNotOut){
+            if (tdj !== busyOne && tdj !== busyTwo){
+                tdj.onclick = function () { return false;};
+
+            }
+        }
+
+    }
+
+    function defreezeGame(){
+        for (let tdj of deckNotOut){
+            tdj.onclick = function () { showBox(tdj); };
+
+        }
+    }
+
+
+    function showBox(elemBox){
+        if (selected.length === 0){
+            selected.push(elemBox);
+            elemBox.childNodes[0].style.visibility = 'visible';
+            elemBox.onclick = function () { return false; };
+
+        }
+        else {
+            if (selected.length === 1) {
+
+                elemBox.childNodes[0].style.visibility = 'visible';
+                if (selected[0].className === elemBox.className) {
+                    contor--;
+                    selected[0].onclick = function() { return false;};
+                    elemBox.onclick = function(){ return false; };
+                    arrayRemove(deckNotOut,selected[0]);
+                    arrayRemove(deckNotOut, elemBox);
+                    selected.pop();
+                    if (contor === 0){
+                        alert("Congrats! You know your dancers ;)");
+                    }
+
+
+
+
+                }
+                else{
+                    freezeGame();
+                    setTimeout(function(){
+
+                        elemBox.childNodes[0].style.visibility= 'hidden';
+                        selected[0].childNodes[0].style.visibility = 'hidden';
+                        selected.pop();
+                        defreezeGame();
+                    },1000);
+
+
+                }
+            }
+
+
+        }
+
+
+    }
+</script>
+
+</body>
+</html>

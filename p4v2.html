@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+
+        #mytable {
+            display: flex;
+            background-color: lightyellow;
+            width: 400px;
+        }
+        
+        tbody{
+            display: flex;
+            position: relative;
+            
+        }
+
+        tr {
+            flex-basis: 33.33333333%;
+            display: flex;
+            flex-wrap: wrap;
+            align-content: flex-start;
+            padding: 10px;
+        }
+
+        th, td {
+            flex-basis: 100%;
+            display: flex;
+            padding: 10px;
+
+        }
+        th {
+            font-weight: bold;
+        }
+
+
+    </style>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<table id="mytable" >
+    <tbody>
+    <tr id="fructe"> <th>Fructe</th> <td>Pere</td> <td>Mere</td> <td>Capsuni</td> <td>Portocale</td></tr>
+    <tr id="pret"> <th>Pret</th> <td>9</td> <td>7</td> <td>10</td> <td>2</td></tr>
+    <tr id="cantitate"> <th>Cantitate</th> <td>40</td> <td>30</td> <td>21</td> <td>15</td></tr>
+    </tbody>
+</table>
+
+<script>
+
+    for (let theader of document.getElementsByTagName("th")){
+
+        theader.onclick = function () { ordFunction(theader.parentNode.id); }
+
+    }
+
+    function ordFunction(row){
+        var ord = 0;
+        var ordElems = [];
+        var elems = document.getElementById(row).getElementsByTagName("td");
+        if (isNaN(Number(elems[0].innerText)) === true){
+            ord = 1;
+        }
+
+        if (ord === 0){
+            //elems are numbers
+
+            ordNumFunction(elems);
+        }
+        else {
+            //elems are strings
+            ordAlphFunction(elems);
+        }
+
+
+    }
+
+
+    function ordAlphFunction(elems){
+        var shouldSwitch, i, x, y;
+        var switching = true;
+        while(switching){
+            switching = false;
+            for (i = 0; i< (elems.length - 1); i++) {
+                shouldSwitch = false;
+                x = elems[i].innerText;
+                y = elems[i + 1].innerText;
+                if (x.toLowerCase() > y.toLowerCase()) {
+                    shouldSwitch = true;
+                    break;
+                }
+            }
+
+            if (shouldSwitch) {
+
+                elems[i].parentNode.insertBefore(elems[i + 1], elems[i]);
+                switching = true;
+            }
+
+        }
+    }
+
+
+    function ordNumFunction(elems){
+        var shouldSwitch, i, x, y;
+        var switching = true;
+        while(switching){
+            switching=false;
+            for (i = 0; i< (elems.length - 1); i++){
+                shouldSwitch = false;
+                x = elems[i].innerText;
+                y = elems[i + 1].innerText;
+                if (Number(x) > Number(y)) {
+                    shouldSwitch = true;
+                    break;
+                }
+
+            }
+            if (shouldSwitch) {
+
+                elems[i].parentNode.insertBefore(elems[i + 1], elems[i]);
+                switching = true;
+            }
+
+        }
+    }
+
+</script>
+
+</body>
+</html>

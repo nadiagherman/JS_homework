@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <style>
+        tr, td{
+            padding: 40px 50px;
+            border: 1px solid black
+        }
+
+        #mytable {
+
+        }
+    </style>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div>
+    <table id="mytable">
+        <tbody>
+        <tr>
+            <td class="box 1" ><p>1</p></td>
+            <td class="box 2"><p>2</p></td>
+            <td class="box 3"><p>3</p></td>
+            <td class="box 4"><p>4</p></td>
+        </tr>
+        <tr>
+            <td class="box 3"><p>3</p></td>
+            <td class="box 1"><p>1</p></td>
+            <td class="box 7"><p>7</p></td>
+            <td class="box 5" ><p>5</p></td>
+        </tr>
+
+        <tr>
+            <td class="box 2"><p>2</p></td>
+            <td class="box 8"><p>8</p></td>
+            <td class="box 6"><p>6</p></td>
+            <td class="box 4"><p>4</p></td>
+        </tr>
+        <tr>
+            <td class="box 6"><p>6</p></td>
+            <td class="box 7"><p>7</p></td>
+            <td class="box 5"><p>5</p></td>
+            <td class="box 8"><p>8</p></td>
+        </tr>
+
+        </tbody>
+    </table>
+</div>
+
+
+<script>
+    var selected = [];
+    var contor = 8;
+    var shuffled;
+    function shuffle(decky) {
+
+        var currentIndex = decky.length, temporaryValue, randomIndex;
+
+        while (currentIndex !== 0) {
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex -= 1;
+            temporaryValue = decky[currentIndex];
+            decky[currentIndex] = decky[randomIndex];
+            decky[randomIndex] = temporaryValue;
+        }
+        return decky;
+
+    }
+
+
+     var deck =  document.getElementsByClassName("box");
+    deckList = [...deck];
+     shuffled = shuffle(deckList);
+     var boxes = document.getElementsByTagName("tr");
+
+     var countNode = 0;
+     var k;
+     var removing;
+     for (let i = 0; i < (boxes.length) ;i++) {
+        removing = boxes[i].childNodes;
+        for (let child of removing){
+            boxes[i].removeChild(child);
+        }
+
+        k=4;
+        while (k>0){
+            boxes[i].appendChild(shuffled[countNode]);
+            countNode++;
+            k--;
+        }
+     }
+
+     var deckNotOut = deckList;
+     for (let tdi of deckList) {
+         tdi.childNodes[0].style.visibility = 'hidden';
+         tdi.onclick = function () {
+             showBox(tdi);
+         };
+
+     }
+
+     function freezeGame(busyOne, busyTwo){
+         for ( let tdj of deckNotOut){
+             if (tdj !== busyOne && tdj !== busyTwo){
+                 tdj.onclick = function () { return false;};
+
+                 }
+         }
+
+         }
+
+     function defreezeGame(){
+         for (let tdj of deckNotOut){
+             tdj.onclick = function () { showBox(tdj); };
+
+             }
+     }
+
+    function arrayRemove(arr, value) { return arr.filter(function(ele){ return ele !== value; });}
+
+
+     function showBox(elemBox){
+         if (selected.length === 0){
+             selected.push(elemBox);
+             elemBox.childNodes[0].style.visibility = 'visible';
+         }
+         else {
+             if (selected.length === 1) {
+
+                 elemBox.childNodes[0].style.visibility = 'visible';
+                 if (selected[0].className === elemBox.className) {
+                     contor--;
+                     selected[0].onclick = function() { return false;};
+                     elemBox.onclick = function(){ return false; };
+                     selected.pop();
+                     arrayRemove(deckNotOut,selected[0]);
+                     arrayRemove(deckNotOut, elemBox);
+                     if (contor === 0){
+                         alert("Congrats");
+                     }
+
+                 }
+                 else{
+                     freezeGame();
+                     setTimeout(function(){
+
+                         elemBox.childNodes[0].style.visibility= 'hidden';
+                         selected[0].childNodes[0].style.visibility = 'hidden';
+                         selected.pop();
+                         defreezeGame();
+                     },1000);
+
+
+                 }
+             }
+
+         }
+
+
+     }
+</script>
+
+</body>
+</html>
